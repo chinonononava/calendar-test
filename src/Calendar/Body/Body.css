@@ -21,6 +21,15 @@
                 color: #eeeeee;
             }
 
+            &:hover:not(.month-outside) {
+                background-color: lightgray;
+                border-radius: 50%;
+            }
+            &:active:not(.month-outside) {
+                background-color: gray;
+                border-radius: 50%;
+            }
+
             &.highlight {
                 background-color: #db3d44;
                 color: white;
@@ -39,7 +48,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* transition: background-color 0.3s; */
             border-radius: 8px;
             cursor: pointer;
 
