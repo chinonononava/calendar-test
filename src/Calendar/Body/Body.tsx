@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { Dispatch, FC, SetStateAction, useContext, useMemo } from 'react';
 
 import { CalendarMode, abbrDayNames, abbrMonthNames } from '../utils';
 import { CalendarContext } from '../CalendarContext';
@@ -9,7 +9,14 @@ const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
 }
 
-const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalendarMode) => {
+const renderBodyContent = (
+    currentDate: string,
+    selectedDate: string,
+    calendarMode: CalendarMode,
+    setCurrentDate: Dispatch<SetStateAction<string>>,
+    setSelectedDate: Dispatch<SetStateAction<string>>,
+    setCalendarMode: Dispatch<SetStateAction<CalendarMode>>
+) => {
     switch(calendarMode) {
         case CalendarMode.DAY:
             const temp = new Date(currentDate);
@@ -26,9 +33,19 @@ const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalenda
                     {[...Array(firstDayOfTheWeek)].map((__, idx) => (
                         <span className="day month-outside">{lastDayOfPrevMonth + 1 - (firstDayOfTheWeek - idx)}</span>
                     ))}
-                    {[...Array(daysInMonth)].map((___, idx) => (
-                        <span className="day">{idx + 1}</span>
-                    ))}
+                    {[...Array(daysInMonth)].map((___, idx) => {
+                        const sTemp = new Date(selectedDate);
+                        const isSelected = sTemp.getDate() === idx && sTemp.getMonth() === temp.getMonth() && sTemp.getFullYear() === temp.getFullYear();
+                        const className = isSelected ? ' highlight' : '';
+                        const onClick = () => {
+                            const newDate = new Date(temp.getFullYear(), temp.getMonth(), idx);
+                            setCurrentDate(newDate.toDateString());
+                            setSelectedDate(newDate.toDateString());
+                        }
+                        return (
+                            <span className={`day${className}`} onClick={onClick}>{idx + 1}</span>
+                        )
+                    })}
                     {[...Array(daysOfNextMonth)].map((___, idx) => (
                         <span className="day month-outside">{idx + 1}</span>
                     ))}
@@ -38,16 +55,21 @@ const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalenda
             return (
                 <div className="twelve-grid">
                     {abbrMonthNames.map((month: string, idx) => {
+                        const temp = new Date(currentDate);
+                        const sTemp = new Date(selectedDate);
+                        const isSelected = sTemp.getMonth() === idx && sTemp.getFullYear() === temp.getFullYear();
+                        const className = isSelected ? 'highlight' : '';
                         const onClick = () => {
                             const temp = new Date(currentDate);
                             const currentYear = temp.getFullYear();
                             const currentDateOfMonth = temp.getDate();
                             const monthDate = new Date(currentYear, idx, currentDateOfMonth);
                             setCurrentDate(monthDate.toDateString());
+                            setSelectedDate(monthDate.toDateString());
                             setCalendarMode(CalendarMode.DAY);
                         }
                         return (
-                            <span onClick={onClick}>{month}</span>
+                            <span onClick={onClick} className={className}>{month}</span>
                         )
                     })}
                 </div>
@@ -58,15 +80,19 @@ const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalenda
                     {[...Array(12)].map((__, idx) => {
                         const temp = new Date(currentDate);
                         const currentYear = temp.getFullYear();
+                        const sTemp = new Date(selectedDate);
+                        const isSelected = sTemp.getFullYear() === currentYear + idx;
+                        const className = isSelected ? 'highlight' : '';
                         const onClick = () => {
                             const currentDateOfSelected = temp.getDate();
                             const currentMonthOfSelected = temp.getMonth();
                             const newDate = new Date(currentYear + idx, currentMonthOfSelected, currentDateOfSelected);
                             setCurrentDate(newDate.toDateString());
+                            setSelectedDate(newDate.toDateString());
                             setCalendarMode(CalendarMode.MONTH);
                         }
                         return (
-                            <span onClick={onClick}>{currentYear + idx}</span>
+                            <span onClick={onClick} className={className}>{currentYear + idx}</span>
                         )
                     })}
                 </div>
@@ -77,12 +103,29 @@ const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalenda
 };
 
 const Body: FC = () => {
-    const { calendarMode, currentDate, setCalendarMode, setCurrentDate } = useContext(CalendarContext);
+    const { 
+        currentDate,
+        selectedDate,
+        calendarMode,
+        setCurrentDate,
+        setSelectedDate,
+        setCalendarMode
+    } = useContext(CalendarContext);
     
     return (
         <div className="body">
-            {renderBodyContent(calendarMode, currentDate, setCurrentDate, setCalendarMode)}
+            {
+                useMemo(() => renderBodyContent(
+                    currentDate,
+                    selectedDate,
+                    calendarMode,
+                    setCurrentDate,
+                    setSelectedDate,
+                    setCalendarMode
+                ), [currentDate, selectedDate, calendarMode])
+            }
         </div>
+
     )
 }
 

@@ -5,6 +5,8 @@ import { CalendarMode } from '../utils';
 export interface CalendarContextProps {
     currentDate: string;
     setCurrentDate: Dispatch<SetStateAction<string>>;
+    selectedDate: string;
+    setSelectedDate: Dispatch<SetStateAction<string>>;
     calendarMode: CalendarMode;
     setCalendarMode: Dispatch<SetStateAction<CalendarMode>>;
 }
@@ -12,6 +14,7 @@ export interface CalendarContextProps {
 export const CalendarContext = createContext({} as CalendarContextProps);
 
 export const CalendarProvider: FC<{ children: ReactNode }> = ({ children }) => {
+    const [selectedDate, setSelectedDate] = useState<string>(new Date().toDateString());
     const [currentDate, setCurrentDate] = useState<string>(new Date().toDateString());
     const [calendarMode, setCalendarMode] = useState<CalendarMode>(CalendarMode.DAY);
     
@@ -19,12 +22,16 @@ export const CalendarProvider: FC<{ children: ReactNode }> = ({ children }) => {
         currentDate,
         setCurrentDate,
         calendarMode,
-        setCalendarMode 
+        setCalendarMode,
+        selectedDate,
+        setSelectedDate,
     }), [
         currentDate,
         setCurrentDate,
         calendarMode,
-        setCalendarMode
+        setCalendarMode,
+        selectedDate,
+        setSelectedDate,
     ]);
 
     return (
