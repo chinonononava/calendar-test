@@ -1,5 +1,6 @@
 .calendar {
     display: flex;
+    flex-direction: column;
     height: 400px;
     width: 300px;
     padding: 12px;

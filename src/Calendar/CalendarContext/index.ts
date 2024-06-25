@@ -1,1 +1,1 @@
-export { CalendarContext, CalendarProvider, CalendarContextProps } from './CalendarContext';
+export { CalendarContext, default as CalendarProvider } from './CalendarContext';

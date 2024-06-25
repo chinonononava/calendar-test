@@ -1,0 +1,20 @@
+.body {
+
+    .days {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(calc(24px), 1fr));
+        grid-auto-rows: minmax(24px, auto);
+        gap: 20px;
+
+        .day {
+
+            &.of-week {
+                font-weight: 500;
+            }
+
+            &.month-outside {
+                color: lightgray;
+            }
+        }
+    }
+}
