@@ -35,10 +35,10 @@ const renderBodyContent = (
                     ))}
                     {[...Array(daysInMonth)].map((___, idx) => {
                         const sTemp = new Date(selectedDate || 0);
-                        const isSelected = selectedDate && sTemp.getDate() === idx && sTemp.getMonth() === temp.getMonth() && sTemp.getFullYear() === temp.getFullYear();
+                        const isSelected = selectedDate && sTemp.getDate() === idx + 1 && sTemp.getMonth() === temp.getMonth() && sTemp.getFullYear() === temp.getFullYear();
                         const className = isSelected ? ' highlight' : '';
                         const onClick = () => {
-                            const newDate = new Date(temp.getFullYear(), temp.getMonth(), idx);
+                            const newDate = new Date(temp.getFullYear(), temp.getMonth(), idx + 1);
                             setCurrentDate(newDate.toDateString());
                             setSelectedDate(newDate.toDateString());
                         }

@@ -21,12 +21,12 @@
                 color: #eeeeee;
             }
 
-            &:hover:not(.month-outside) {
-                background-color: lightgray;
+            &:hover:not(.month-outside):not(.highlight) {
+                background-color: #eeeeee;
                 border-radius: 50%;
             }
-            &:active:not(.month-outside) {
-                background-color: gray;
+            &:active:not(.month-outside):not(.highlight) {
+                background-color: lightgray;
                 border-radius: 50%;
             }
 
@@ -52,10 +52,10 @@
             cursor: pointer;
 
             &:hover {
-                background-color: lightgray;
+                background-color: #eeeeee;
             }
             &:active {
-                background-color: gray;
+                background-color: lightgray;
             }
             &.highlight {
                 background-color: #db3d44;
