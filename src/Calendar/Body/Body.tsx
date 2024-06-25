@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 
-import { CalendarMode, abbrDayNames } from '../utils';
+import { CalendarMode, abbrDayNames, abbrMonthNames } from '../utils';
 import { CalendarContext } from '../CalendarContext';
 
 import './Body.css';
@@ -9,7 +9,7 @@ const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
 }
 
-const renderBodyContent = (calendarMode, currentDate) => {
+const renderBodyContent = (calendarMode, currentDate, setCurrentDate, setCalendarMode) => {
     switch(calendarMode) {
         case CalendarMode.DAY:
             const temp = new Date(currentDate);
@@ -34,17 +34,54 @@ const renderBodyContent = (calendarMode, currentDate) => {
                     ))}
                 </div>
             );
+        case CalendarMode.MONTH:
+            return (
+                <div className="twelve-grid">
+                    {abbrMonthNames.map((month: string, idx) => {
+                        const onClick = () => {
+                            const temp = new Date(currentDate);
+                            const currentYear = temp.getFullYear();
+                            const currentDateOfMonth = temp.getDate();
+                            const monthDate = new Date(currentYear, idx, currentDateOfMonth);
+                            setCurrentDate(monthDate.toDateString());
+                            setCalendarMode(CalendarMode.DAY);
+                        }
+                        return (
+                            <span onClick={onClick}>{month}</span>
+                        )
+                    })}
+                </div>
+            )
+        case CalendarMode.YEAR:
+            return (
+                <div className="twelve-grid">
+                    {[...Array(12)].map((__, idx) => {
+                        const temp = new Date(currentDate);
+                        const currentYear = temp.getFullYear();
+                        const onClick = () => {
+                            const currentDateOfSelected = temp.getDate();
+                            const currentMonthOfSelected = temp.getMonth();
+                            const newDate = new Date(currentYear + idx, currentMonthOfSelected, currentDateOfSelected);
+                            setCurrentDate(newDate.toDateString());
+                            setCalendarMode(CalendarMode.MONTH);
+                        }
+                        return (
+                            <span onClick={onClick}>{currentYear + idx}</span>
+                        )
+                    })}
+                </div>
+            )
         default:
             return <></>;
     }
 };
 
 const Body: FC = () => {
-    const { calendarMode, currentDate } = useContext(CalendarContext);
+    const { calendarMode, currentDate, setCalendarMode, setCurrentDate } = useContext(CalendarContext);
     
     return (
         <div className="body">
-            {renderBodyContent(calendarMode, currentDate)}
+            {renderBodyContent(calendarMode, currentDate, setCurrentDate, setCalendarMode)}
         </div>
     )
 }

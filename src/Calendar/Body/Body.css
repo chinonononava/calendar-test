@@ -17,4 +17,27 @@
             }
         }
     }
+
+    .twelve-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(calc(50px), 1fr));
+        grid-auto-rows: minmax(40px, auto);
+        gap: 20px;
+
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            border-radius: 8px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: lightgray;
+            }
+            &:active {
+                background-color: gray;
+            }
+        }
+    }
 }
