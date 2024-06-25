@@ -27,3 +27,9 @@ export const abbrMonthNames = [
     "Nov",
     "Dec"
 ]
+
+export enum CalendarMode {
+    YEAR = 'year',
+    MONTH = 'month',
+    DAY = 'day'
+}

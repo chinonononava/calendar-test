@@ -1,5 +1,7 @@
-import React, { FC, useState } from 'react';
-import { abbrMonthNames, monthNames } from './utils';
+import React, { FC } from 'react';
+
+import { Header } from './Header';
+import { CalendarProvider } from './CalendarContext';
 
 import './Calendar.css';
 
@@ -8,42 +10,13 @@ interface CalendarProps {
 }
 
 const Calendar: FC<CalendarProps> = ({ date }) => {
-    const [currentDate, setCurrentDate] = useState<string>(date?.toDateString() || new Date().toDateString());
-
-    const onClickPrev = () => {
-        const temp = new Date(currentDate)
-        temp.setMonth(temp.getMonth()-1);
-        const newDate = temp.toDateString();
-        setCurrentDate(newDate);
-    }
-
-    const onClickNext = () => {
-        const temp = new Date(currentDate)
-        temp.setMonth(temp.getMonth()-1);
-        const newDate = temp.toDateString();
-        setCurrentDate(newDate);
-    }
-
-    const HeaderText: FC = () => {
-        const currentDateSplit = currentDate.split(' ');
-        const monthIndex = abbrMonthNames.findIndex((item: string) => currentDateSplit[1] == item);
-        const month = monthNames[monthIndex];
-        const year = currentDateSplit[3];
-        
-        return (
-            <span>{`${month} ${year}`}</span>
-        );
-    };
-
     return (
-        <div className="calendar">
-            <div className="header">
-                <button className="nav" onClick={onClickPrev}>{`<`}</button>
-                <HeaderText />
-                <button className="nav" onClick={onClickNext}>{`>`}</button>
+        <CalendarProvider>
+            <div className="calendar">
+                <Header />
+                <div className="body"></div>
             </div>
-            <div className="body"></div>
-        </div>
+        </CalendarProvider>
     )
 }
 

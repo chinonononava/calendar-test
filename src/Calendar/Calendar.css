@@ -5,18 +5,4 @@
     padding: 12px;
     background-color: white;
     color: black;
-
-    .header {
-        display:flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-        height: 50px;
-        font-weight: bold;
-    }
-
-    .nav {
-        color: black;
-        background-color: transparent;
-    }
 }
